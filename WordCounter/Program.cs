@@ -1,25 +1,56 @@
-﻿namespace WordCounter
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+
+namespace WordCounter
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var path = "input.txt";
+            var dict = new Dictionary<string, int>();
+            dict = Task(path);
+            dict.Remove("");
+            foreach(var item in dict) 
+            {
+                Console.WriteLine($"{item.Value}\t{item.Key}");
+            }
+
+            //Console.WriteLine($"ПУСТАЯ СТРОКА ВСТРЕЧАЕТСЯ {dict[""]} РАЗ");
         }
 
-        public static void Task()
+        public static Dictionary<string, int> Task(string path)
         {
-            char[] buffer = new char[104857600];
-            string text = "";
-            FileStream fstream = new FileStream("document.txt", FileMode.Open, FileAccess.Read);
-            using (var sr = new StreamReader(fstream))
+            var dict = new Dictionary<string, int>();
+
+            using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (StreamReader sr = new StreamReader(bs))
             {
-                int bytesRead = 0;
-                while ((bytesRead = sr.Read(buffer, 0, buffer.Length)) > 0)
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    text = new string(buffer);
-                    // обработка текста
+                    ProcessString(line, dict);
                 }
+            }
+
+            return dict;
+        }
+
+        private static void ProcessString(string line, Dictionary<string, int> dict)
+        {
+            line = line.Trim();
+            string pattern = @"[\s,\.]";
+            RegexOptions options = RegexOptions.Multiline;
+            Regex regex = new Regex(pattern, options);
+            var matches = regex.Split(line);
+
+            var tmpWord = "";
+            foreach (var item in matches) 
+            {
+                tmpWord = item.ToLower();
+                if(!dict.ContainsKey(tmpWord)) dict.Add(tmpWord, 0);
+                dict[tmpWord] += 1;
             }
         }
     }
