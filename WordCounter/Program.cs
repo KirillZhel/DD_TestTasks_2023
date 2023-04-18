@@ -16,8 +16,6 @@ namespace WordCounter
             {
                 Console.WriteLine($"{item.Value}\t{item.Key}");
             }
-
-            //Console.WriteLine($"ПУСТАЯ СТРОКА ВСТРЕЧАЕТСЯ {dict[""]} РАЗ");
         }
 
         public static Dictionary<string, int> Task(string path)
