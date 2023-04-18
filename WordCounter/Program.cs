@@ -11,7 +11,8 @@ namespace WordCounter
             var dict = new Dictionary<string, int>();
             dict = Task(path);
             dict.Remove("");
-            foreach(var item in dict) 
+            dict.Remove("'");
+            foreach (var item in dict) 
             {
                 Console.WriteLine($"{item.Value}\t{item.Key}");
             }
@@ -40,9 +41,7 @@ namespace WordCounter
         private static void ProcessString(string line, Dictionary<string, int> dict)
         {
             line = line.Trim();
-            string pattern = @"[\s,\.]";
-            //string pattern = @"[\s,\.]"; \w+\b - паттерн для match
-            //https://regexone.com/lesson/misc_meta_characters?
+            string pattern = @"[\d\s,\.\)\(\[\]{}\-@~!#$%^&*_+=\\\/№;:\?<>\" + "\"]";
             RegexOptions options = RegexOptions.Multiline;
             Regex regex = new Regex(pattern, options);
             var matches = regex.Split(line);
