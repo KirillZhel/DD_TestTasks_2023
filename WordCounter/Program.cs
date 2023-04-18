@@ -41,6 +41,8 @@ namespace WordCounter
         {
             line = line.Trim();
             string pattern = @"[\s,\.]";
+            //string pattern = @"[\s,\.]"; \w+\b - паттерн для match
+            //https://regexone.com/lesson/misc_meta_characters?
             RegexOptions options = RegexOptions.Multiline;
             Regex regex = new Regex(pattern, options);
             var matches = regex.Split(line);
