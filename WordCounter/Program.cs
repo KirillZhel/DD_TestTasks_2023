@@ -7,18 +7,26 @@ namespace WordCounter
     {
         static void Main(string[] args)
         {
-            var path = "input.txt";
+            var path = GetPath();
             var dict = new Dictionary<string, int>();
-            dict = Task(path);
+            dict = CountWords(path);
             dict.Remove("");
             dict.Remove("'");
-            foreach (var item in dict) 
+
+            foreach (var item in dict.OrderByDescending(x => x.Value))
             {
-                Console.WriteLine($"{item.Value}\t{item.Key}");
+                Console.WriteLine($"{item.Key,-15}{item.Value}");
             }
         }
 
-        public static Dictionary<string, int> Task(string path)
+        public static string GetPath()
+        {
+            Console.Write("Введите путь к текстовому файлу: ");
+            var path = Console.ReadLine();
+            return path;
+        }
+
+        public static Dictionary<string, int> CountWords(string path)
         {
             var dict = new Dictionary<string, int>();
 
